@@ -16,37 +16,57 @@ def main():
   init_min = config['init_min']
   min_interval = config['min_interval']
   subtitle = config['video_subtitle']
+  show_hour = config['show_hour']
   
   # Verifica si existen las rutas
   if not exists_path(os.path.dirname(input_path)): return
   if not exists_path(os.path.dirname(output_path)): return
   
   # Image size
-  width = read_image_size('./Belen Agosto - 246064')[0]
+  width = read_image_size(os.path.dirname(input_path))[0]
   
   # Calcula la fecha y hora inicial
   initial_time = datetime(init_year, init_month, init_day, init_hour, init_min)
   print(f"{Fore.CYAN}Fecha y hora inicial: {initial_time}{Style.RESET_ALL}")
   print(f"{Fore.CYAN}Generando frames cada {min_interval} minutos a {framerate} fps{Style.RESET_ALL}")
 
-  # Genera el comando ffmpeg con drawtext para calcular la fecha y hora dinámicamente
-  min = f"%{'{'}eif\\:{init_min} + mod(n*{min_interval},60)\\:d\\:2{'}'}"
-  hour = f"%{'{'}eif\\:{init_hour} + mod((n*{min_interval})/60,24)\\:d\\:2{'}'}"
-  day = f"%{'{'}eif\\:{init_day} + mod((n*{min_interval})/60/24,31)\\:d\\:2{'}'}"
-  month = f"%{'{'}eif\\:{init_month} + (n*{min_interval})/60/24/31\\:d\\:2{'}'}"
+
+  min = f"({init_min} + (n*{min_interval}))"
+  hour = f"({init_hour} + {min}/60)"
+  day =   f"({init_day} + {hour}/24)"
+  
+  days_of_month = f"(31-mod({init_month} + {day}/31,2))"
+  
+  month = f"{init_month} + ({day}-1)/{days_of_month}"
+
+  min =   f"mod({min},60)"
+  hour =  f"mod({hour},24)"
+  day =   f"1+mod({day}-1,{days_of_month})"
+  month = f"1+mod({month}-1,12)"
   year = init_year
+
+  # Genera el comando ffmpeg con drawtext para calcular la fecha y hora dinámicamente
+  min = f"%{'{'}eif\\:{min}\\:d\\:2{'}'}"
+  hour = f"%{'{'}eif\\:{hour}\\:d\\:2{'}'}"
+  day = f"%{'{'}eif\\:{day}\\:d\\:2{'}'}"
+  month = f"%{'{'}eif\\:{month}\\:d\\:2{'}'}"
+
+  timer_width = 220 if show_hour else 160
 
   command = [
       'ffmpeg',
       '-framerate', str(framerate),
       '-i', input_path,
       '-vf', (
-          f"drawtext=text='{day}-{month}-{year} {hour}\\:{min}'"
-          f":x={width - 220}:y=10:fontsize=24:fontcolor=white"
-          f",drawtext=text='{subtitle}':x=10:y=10:fontsize=24:fontcolor=white"
+          (f"drawtext=text='{day}-{month}-{year}")
+          + (f" {hour}\\:{min}'" if show_hour else "'")
+          + (f":x={width - timer_width}:y=10:fontsize=24:fontcolor=white")
+          + (f",drawtext=text='{subtitle}':x=10:y=10:fontsize=24:fontcolor=white")
       ),
       output_path
   ]
+  
+  print (f"{Fore.CYAN}Comando: {' '.join(command)}{Style.RESET_ALL}")
   
   subprocess.run(command)
 

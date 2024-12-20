@@ -1,12 +1,13 @@
 {
-  "input_path": "./frames/Belen Agosto - 246064/Belen246064f%04d.png",
-  "output_path": "./video/output 1h.mp4",
-  "framerate": 2,
+  "input_path": "./frames/Apeadero por dia/Apeaderof%04d.png",
+  "output_path": "./video/Apeadero 1dia.mp4",
+  "framerate": 1,
   "init_year": 2024,
-  "init_month": 8,
-  "init_day": 5,
+  "init_month": 11,
+  "init_day": 1,
   "init_hour": 0,
   "init_min": 0,
-  "min_interval": 60,
-  "video_subtitle": "246064 - Agosto"
+  "min_interval": 1440,
+  "video_subtitle": "Apeadero Noviembre",
+  "show_hour": false
 }
