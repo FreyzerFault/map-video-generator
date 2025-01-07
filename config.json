@@ -1,13 +1,14 @@
 {
-  "input_path": "./frames/Apeadero por dia/Apeaderof%04d.png",
-  "output_path": "./video/Apeadero 1dia.mp4",
-  "framerate": 1,
+  "input_path": "./frames/Todo 15m/f%04d.png",
+  "output_path": "./video/Agosto-Noviembre 15m.mp4",
+  "framerate": 20,
   "init_year": 2024,
-  "init_month": 11,
-  "init_day": 1,
+  "init_month": 8,
+  "init_day": 5,
   "init_hour": 0,
   "init_min": 0,
-  "min_interval": 1440,
-  "video_subtitle": "Apeadero Noviembre",
-  "show_hour": false
+  "min_interval": 15,
+  "video_subtitle": "Agosto - Noviembre (cada 15m)",
+  "realtime_date": false,
+  "debug": false
 }
