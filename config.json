@@ -1,16 +1,21 @@
 {
   "input_path": "./frames/Escapada 1m/f%04d.png",
   "output_path": "./video/Escapada 1m 17-31 de Octubre 30fps.mp4",
+
   "framerate": 30,
-  "init_year": 2024,
-  "init_month": 10,
-  "init_day": 17,
-  "init_hour": 7,
-  "init_min": 0,
+
   "min_interval": 1,
+
   "use_secs": false,
-  "init_sec": 0,
   "sec_interval": 10,
+
+  "init_sec": 0,
+  "init_min": 0,
+  "init_hour": 7,
+  "init_day": 17,
+  "init_month": 10,
+  "init_year": 2024,
+
   "video_title": "Escapada (1min / frame)",
   "realtime_date": true,
   "show_date": true,
