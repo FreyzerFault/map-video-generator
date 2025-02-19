@@ -1,23 +1,23 @@
 {
-  "input_path": "./frames/Escapada 1m/f%04d.png",
-  "output_path": "./video/Escapada 1m 17-31 de Octubre 30fps.mp4",
+  "input_path": "./frames/Agosto-Septiembre 5m/f%04d.png",
+  "output_path": "./video/Entrenamiento Agosto-Septiembre 5m.mp4",
 
-  "framerate": 30,
+  "framerate": 6,
 
-  "min_interval": 1,
+  "min_interval": 5,
 
   "use_secs": false,
   "sec_interval": 10,
 
   "init_sec": 0,
   "init_min": 0,
-  "init_hour": 7,
-  "init_day": 17,
-  "init_month": 10,
+  "init_hour": 8,
+  "init_day": 5,
+  "init_month": 8,
   "init_year": 2024,
 
-  "video_title": "Escapada (1min / frame)",
-  "realtime_date": true,
+  "video_title": "Entrenamiento Agosto & Septiembre (5min / frame)",
+  "realtime_date": false,
   "show_date": true,
   "debug": false
 }

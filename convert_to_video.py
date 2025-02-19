@@ -107,8 +107,8 @@ def main():
   margin = 10
   line_height = 40
   date_width = 150
-  timer_width = 100
-  total_days_width = 100
+  timer_width = 80
+  total_days_width = 80
   
   image_size = read_image_size(os.path.dirname(input_path))
   width = image_size[0] # Image size
@@ -132,7 +132,7 @@ def main():
     text_filter = concatenate_filters(title_filter, date_and_timer_filter)
   else:
     # Starting DATE
-    start_date_filter += build_text_filter(f"Desde el {init_date_txt}", margin, margin + line_height, 24)
+    start_date_filter = build_text_filter(f"Desde el {init_date_txt}", margin, margin + line_height, 24)
     # DAY Counter & TIMER
     day_count_and_timer_filter = build_text_filter(f"{total_days_txt} {timer_txt if show_timer else ''}",
                                       width - margin - total_days_width - timer_width if show_timer else 0, margin, 24)

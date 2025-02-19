@@ -8,9 +8,9 @@ Para convertir estos frames a un video he creado este script que usa ffmpeg.
 
 ## Uso
 
-Al generar los frames con QGIS, selecciona como carpeta de extracción una nueva carpeta dentro de **./frames**, y configura como nombre de cada imagen "f%04.png". (puedes configurar el nombre que quieras si lo cambias en el "_config.json_").
+Al generar los frames con QGIS, selecciona como carpeta de extracción una nueva carpeta dentro de **_./frames_**, y configura como nombre de cada imagen "_f%04.png_". (puedes configurar el nombre que quieras si lo cambias en el "_config.json_").
 
-Configura la carpeta de entrada y de salida en el **config.json** junto con el nombre dinámico de los frames y el nombre del video.
+Configura la carpeta de entrada y de salida en el **_config.json_** junto con el nombre dinámico de los frames y el nombre del video.
 
 Configura los demás parámetros acorde a la configuración usada en QGIS:
 
@@ -30,3 +30,11 @@ Por último, ejecuta convert_to_video.bat.
 - Python 3
 
 (Las dependencias adicionales se instalan automáticamente al ejecutar el script convert_to_video.bat por primera vez)
+
+## GIFS
+
+Como recomendación propia, uso [ezgif.com](https://ezgif.com/video-to-gif/ezgif-8529961dbedf1.mp4) para sacar gifs de los videos generados.
+
+Son mucho más ligeros y fáciles de usar para colgarlos en una web.
+
+![gif](gif_demo.gif)
