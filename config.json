@@ -1,6 +1,6 @@
 {
-  "input_path": "./frames/Agosto-Septiembre 5m/f%04d.png",
-  "output_path": "./video/Entrenamiento Agosto-Septiembre 5m.mp4",
+  "input_path": "./frames/Noviembre/f%04d.png",
+  "output_path": "./video/Noviembre 1-18.mp4",
 
   "framerate": 6,
 
@@ -11,13 +11,13 @@
 
   "init_sec": 0,
   "init_min": 0,
-  "init_hour": 8,
-  "init_day": 5,
-  "init_month": 8,
+  "init_hour": 0,
+  "init_day": 1,
+  "init_month": 11,
   "init_year": 2024,
 
-  "video_title": "Entrenamiento Agosto & Septiembre (5min / frame)",
-  "realtime_date": false,
+  "video_title": "Noviembre 01 - 18 (5 min / frame)",
+  "realtime_date": true,
   "show_date": true,
   "debug": false
 }
