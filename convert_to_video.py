@@ -17,6 +17,9 @@ def main():
   init_day = config['init_day']
   init_hour = config['init_hour']
   init_min = config['init_min']
+  end_day = config['end_day']
+  end_month = config['end_month']
+  end_year = config['end_year']
   min_interval = config['min_interval']
   use_secs = config['use_secs']
   init_sec = config["init_sec"]
@@ -25,6 +28,9 @@ def main():
   show_date = config['show_date']
   debug = config['debug']
   
+  show_scale_bar = config['scale_bar']
+  show_legend = config['legend']
+  
   # Realtime date:
   # Si es True, se calculará la fecha y hora de cada frame extrapolando de la fecha inicial.
   # Si es False, se mostrará la fecha inicial y un contador de días desde el inicio.
@@ -32,8 +38,10 @@ def main():
   realtime_date = config['realtime_date']
   
   # CHECK PATHS
-  if not exists_path(os.path.dirname(input_path)): return
-  if not exists_path(os.path.dirname(output_path)): return
+  if not exists_path(os.path.dirname(input_path)):
+    return
+  if not exists_path(os.path.dirname(output_path)):
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
   
   print(f"{Fore.CYAN}Iniciando conversión de frames a video{Style.RESET_ALL}")
   print(f"{Fore.CYAN}Frames: {input_path}{Style.RESET_ALL}")
@@ -94,7 +102,7 @@ def main():
   def int_text(exp, digits = 2):
     return func("eif", [str(exp), 'd', str(digits)])
   
-  init_date_txt = f"{int_text(init_day)}-{int_text(init_month)}-{int_text(init_year)}"
+  init_date_txt = f"{int_text(init_day, 1)}/{int_text(init_month, 1)}/{int_text(init_year)} - {int_text(end_day, 1)}/{int_text(end_month, 1)}/{int_text(end_year)}"
   realtime_date_txt = f"{int_text(day)}-{int_text(month)}-{int_text(year)}"
   hour_txt = int_text(hour)
   min_txt = int_text(min)
@@ -124,19 +132,35 @@ def main():
   # TIMER Text
   if realtime_date:
     # DATE & TIMER
-    date_and_timer_filter = build_text_filter(
-      f"{realtime_date_txt if show_date else ""} {timer_txt if show_timer else ""}",
-      width - margin - (date_width if show_date else 0) - (timer_width if show_timer else 0),
-      margin, 24
-    )
+    txt = f"{realtime_date_txt if show_date else ""} {timer_txt if show_timer else ""}"
+    # RIGHT:
+    # x = width - margin - (date_width if show_date else 0) - (timer_width if show_timer else 0)
+    # y = margin
+    # LEFT:
+    x = margin
+    y = margin + line_height
+    date_and_timer_filter = build_text_filter(txt, x,y, fontsize=24)
     text_filter = concatenate_filters(title_filter, date_and_timer_filter)
   else:
     # Starting DATE
-    start_date_filter = build_text_filter(f"Desde el {init_date_txt}", margin, margin + line_height, 24)
+    txt = f"{init_date_txt}"
+    x = margin
+    y = margin + line_height
+    start_date_filter = build_text_filter(txt, x, y, 24)
+    
     # DAY Counter & TIMER
-    day_count_and_timer_filter = build_text_filter(f"{total_days_txt} {timer_txt if show_timer else ''}",
-                                      width - margin - total_days_width - timer_width if show_timer else 0, margin, 24)
+    txt = f"{total_days_txt} {timer_txt if show_timer else ''}"
+    # x = width - margin - total_days_width - timer_width if show_timer else 0
+    # y = margin
+    x = margin
+    y = margin + line_height * 2
+    day_count_and_timer_filter = build_text_filter(txt, x, y, fontsize=24)
+    
     text_filter = concatenate_filters(title_filter, start_date_filter, day_count_and_timer_filter)
+  
+  # IMAGES
+  if show_scale_bar:
+    image_filter = build_image_filter(10, 10)
   
   # DEBUGGING
   if debug:
@@ -148,7 +172,9 @@ def main():
   command = [
       'ffmpeg',
       '-framerate', str(framerate),
-      '-i', input_path,
+      '-i', f"\"{input_path}\"",
+      '-i', f"\"{os.path.join(image_folder, "scale_bar.png")}\"",
+      "-filter_complex", image_filter,
       '-vf',
       text_filter,
       output_path
@@ -161,15 +187,22 @@ def main():
 #endregion
 
 
-#region ====================================== TEXT FILTERS ======================================
+#region ====================================== FILTERS =======================================
+
+# Se pueden concatenar varias expresiones de drawtext para mostrar varios textos en la misma imagen.
+def concatenate_filters(*filters):
+  return ','.join(filters)
+
+# ============================================= TEXT =========================================
 shadow_args = ":shadowcolor=black:shadowx=1:shadowy=1"
 
 def build_text_filter(txt, x, y, fontsize = 24, color = 'white', shadow = False):
   return f"drawtext=text='{txt}':x='{x}':y='{y}':fontsize='{fontsize}':fontcolor='{color}'" + (shadow_args if shadow else "")
 
-# Se pueden concatenar varias expresiones de drawtext para mostrar varios textos en la misma imagen.
-def concatenate_filters(*filters):
-  return ','.join(filters)
+# ============================================= IMAGE =========================================
+image_folder = ".\image comps"
+def build_image_filter(x, y):
+  return f"\"overlay={x}:{y}\""
 
 #endregion
 

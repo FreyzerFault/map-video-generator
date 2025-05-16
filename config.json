@@ -1,10 +1,9 @@
 {
-  "input_path": "./frames/Noviembre/f%04d.png",
-  "output_path": "./video/Noviembre 1-18.mp4",
+  "input_path": "./frames/3 cabras 15m/f%04d.png",
+  "output_path": "./video/3 cabras 15m.mp4",
+  "framerate": 4,
 
-  "framerate": 6,
-
-  "min_interval": 5,
+  "min_interval": 15,
 
   "use_secs": false,
   "sec_interval": 10,
@@ -12,12 +11,18 @@
   "init_sec": 0,
   "init_min": 0,
   "init_hour": 0,
-  "init_day": 1,
-  "init_month": 11,
+  "init_day": 5,
+  "init_month": 8,
   "init_year": 2024,
+  "end_day": 31,
+  "end_month": 8,
+  "end_year": 2024,
 
-  "video_title": "Noviembre 01 - 18 (5 min / frame)",
+  "video_title": "Trazabilidad 3 cabras",
   "realtime_date": true,
   "show_date": true,
-  "debug": false
+  "debug": false,
+
+  "scale_bar": true,
+  "legend": true
 }

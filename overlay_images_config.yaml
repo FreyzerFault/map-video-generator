@@ -1,0 +1,19 @@
+---
+video_path: "./video/3 cabras 15m.mp4"
+out_video_path: "./video/3 cabras 15m con leyenda.mp4"
+
+images: 
+
+  - path: ./image comps/scale_bar.png
+    pos: top_right # Options: top_left, top_right, bottom_left, bottom_right
+    margin: # Margin from the edge of the video frame in pixels
+      x: 40
+      y: 80
+    width_scale: 0.3 # Scale of the image (0.1 = 10% of the video frame width)
+  
+  - path: ./image comps/legend.png
+    pos: bottom_left # Options: top_left, top_right, bottom_left, bottom_right
+    margin: # Margin from the edge of the video frame in pixels
+      x: 40
+      y: 40
+    width_scale: 0.2 # Scale of the image (0.1 = 10% of the video frame width)
