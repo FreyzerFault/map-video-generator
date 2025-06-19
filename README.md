@@ -8,7 +8,7 @@ Para convertir estos frames a un video he creado este script que usa el comando 
 
 ## USO
 
-Por último, ejecuta convert_to_video.bat.
+Cuando hayas configurado todo, ejecuta convert_to_video.bat.
 
 ## CONFIGURACIÓN
 
@@ -24,7 +24,7 @@ Configura su funcionamiento con el archivo **_config.json_**.
 
 - **margin**: Margen del video para el texto (el timer y más)
 - **char_width_by_font**: Ratio anchura de un caracter / el tamaño de letra
-- **line_height_by_font**: Ratio altura de una línea de texto / el tamaño de letra
+- **line_height_by_font**: Ratio altura de una línea de texto / el tamaño de let
 - **line_height_by_font**: Ratio altura de una línea de texto / el tamaño de letra
 
 ### Estilo de cada texto
@@ -71,4 +71,4 @@ Como recomendación propia, uso [ezgif.com](https://ezgif.com/video-to-gif) para
 
 Son mucho más ligeros y fáciles de usar para colgarlos en una web o almacenarlos.
 
-![gif](gif_demo.gif)
+![gif](./docs/gif_demo.gif)

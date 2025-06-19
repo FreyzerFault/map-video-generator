@@ -4,7 +4,7 @@
 :: Install Requirements.txt
 pip install -r requirements.txt
 
-set script_path=map_video_generator.py -ty
+set script_path=./src/main.py -ty
 
 python %script_path%
 

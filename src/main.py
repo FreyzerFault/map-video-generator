@@ -425,7 +425,7 @@ class TimerText(TextBox):
     return f"{to_filter_int_text(self.init_dt.day, 1)}/{to_filter_int_text(self.init_dt.month, 1)}/{to_filter_int_text(self.init_dt.year)} - {to_filter_int_text(self.end_dt.day, 1)}/{to_filter_int_text(self.end_dt.month, 1)}/{to_filter_int_text(self.end_dt.year)}"
 
   def __str__(self):
-    return f"Timer(text={self.text}, position={self.position}, realtime_date={self.realtime_date}, show_date={self.show_date}, interval={self.interval}, initial_datetime={self.initial_datetime}, end_datetime={self.end_datetime}, show_start_and_end_date={self.show_start_and_end_date})"
+    return f"Timer(text={self.text}, position={self.position}, realtime_date={self.realtime_date}, show_date={self.show_date}, interval={self.interval}, init_dt={self.init_dt}, end_dt={self.end_dt}, show_start_and_end_date={self.show_start_and_end_date})"
 
 
 #region ======================================== MAP ========================================
@@ -660,7 +660,7 @@ def main():
 
 
   #region LOAD CONFIG
-  config = load_config("./config.yaml" if not test_mode else "./test_config.yaml")
+  config = load_config("./config.yaml" if not test_mode else "./test/config.yaml")
 
   if not config:
     return
