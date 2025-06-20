@@ -6,11 +6,10 @@ from PIL import Image
 from colorama import Fore, Back, Style
 from datetime import datetime
 from image_utils import read_image_size
-from utils import get_first_file, print_info, print_error, print_emphasis, print_verbose_info, print_warning, print_file_list, printProgressBar
+from utils import ConsoleApp, console, get_first_file
 from utils import load_config, path_not_found
 
 from ffmpeg_operations import overlay_image_on_video, frames_to_video
-
 
 class RelativePosition(Enum):
   TOP_LEFT = "top_left"
@@ -135,7 +134,7 @@ class TextFilterData:
       elif self.rel_position == RelativePosition.CENTER:
           return ((video_width - width) / 2, (video_height - height) / 2)
       else:
-          print_error(
+          console.print_error(
               f"Posición relativa no válida: {self.rel_position}. Debe ser una de las siguientes: {', '.join([pos.value for pos in RelativePosition])}."
           )
           raise ValueError()
@@ -223,7 +222,7 @@ class TextBox:
     text: str = "",
     sample_text: str = "", # Para textos dinámicos como un timer
     position: RelativePosition = RelativePosition.TOP_LEFT,
-    txt_style: TextStyle = TextStyle(),
+    txt_style: TextStyle = None,
   ):
     self.text = text
     self.sample_text = sample_text
@@ -289,7 +288,7 @@ class Interval:
     self.unit = unit
     
     if unit == TimeUnit.INVALID:
-      print_error(f"Unidad de tiempo no válida: {unit.value}. Debe ser una de las siguientes: {[u.value for u in TimeUnit]}.")
+      console.print_error(f"Unidad de tiempo no válida: {unit.value}. Debe ser una de las siguientes: {[u.value for u in TimeUnit]}.")
       self.seconds = -1
       self.unit_label = "[INVALID]"
     
@@ -307,7 +306,7 @@ class Interval:
       unit: TimeUnit = TimeUnit(text[-1])
       return Interval(num, unit)
     except ValueError:
-      print_error(f"Unidad de tiempo no válida: {text[-1]}. Debe ser una de las siguientes: {[unit.value for unit in TimeUnit]}.")
+      console.print_error(f"Unidad de tiempo no válida: {text[-1]}. Debe ser una de las siguientes: {[unit.value for unit in TimeUnit]}.")
       return Interval(num, TimeUnit.INVALID)
 
 
@@ -317,11 +316,11 @@ class TimerText(TextBox):
     filter_text: str = "",
     sample_text: str = "",
     position: RelativePosition = RelativePosition.TOP_LEFT,
-    txt_style: TextStyle = TextStyle(),
+    txt_style: TextStyle = None,
     realtime_date: bool = True,
     show_date: bool = True,
     show_start_and_end_date: bool = False,
-    interval: Interval = Interval(),
+    interval: Interval = None,
     initial_datetime: str = "01-01-2023 00:00:00",
     end_datetime: str = "01-02-2023 00:00:00",
   ):
@@ -410,8 +409,7 @@ class TimerText(TextBox):
     self.text = (
       f"{timer_date_txt if self.show_date else ''} {timer_time_txt if show_time else ''}"
       if self.realtime_date
-      else f"{timer_txt['date_interval_txt']}"
-      f"{timer_txt['total_days']} {timer_time_txt if show_time else ''}"
+      else f"{timer_txt['total_days']} {timer_time_txt if show_time else ''}"
     )
 
     self.sample_text = (
@@ -455,7 +453,7 @@ class Map:
     first_frame = get_first_file(self.frames_path)
     
     if not first_frame:
-      print_error(f"No se ha encontrado ningún frame en la carpeta de frames {self.frames_path}")
+      console.print_error(f"No se ha encontrado ningún frame en la carpeta de frames {self.frames_path}")
       return
     
     self.size = read_image_size(first_frame)  # Placeholder for video size, to be set later
@@ -491,7 +489,7 @@ class Map:
       
       # Check if the map exists in the input frames folder
       if path_not_found(self.frames_path):
-        print_error(
+        console.print_error(
           f"Los frames del mapa {self.name} no se encuentran en la ruta {self.frames_path}."
         )
         return ""
@@ -511,19 +509,22 @@ class Map:
       interval = self.timer.interval
       
       print()
-      print_info(f"\t- ⏱️  {Fore.RED}{interval.num} {interval.unit_label} / frame{Fore.RESET} x {Fore.RED}{self.framerate} fps{Fore.RESET} = {self.framerate * interval.num} {interval.unit_label} {'reales' if interval.num > 1 else 'real'} / seg. de vídeo")
-      print_info(f"\t- 📅 {self.timer.init_dt} - {self.timer.end_dt}")
-      print_info(f"\t- 📏 {self.video_width} x {self.video_height} px")
+      console.print_info(f"\t- ⏱️  {Fore.RED}{interval.num} {interval.unit_label} / frame{Fore.RESET} x {Fore.RED}{self.framerate} fps{Fore.RESET} = {self.framerate * interval.num} {interval.unit_label} {'reales' if interval.num > 1 else 'real'} / seg. de vídeo")
+      console.print_info(f"\t- 📅 {self.timer.init_dt} - {self.timer.end_dt}")
+      console.print_info(f"\t- 📏 {self.video_width} x {self.video_height} px")
       print()
 
       #region ============================ DYNAMIC TEXT FILTER EXPRESSIONS ============================
       
       # ======================== TITLE ========================
 
-      title_filter_data = self.title.to_FilterData()
-      title_filter = title_filter_data.build_text_filter_by_relative_pos(
-        self.video_width, self.video_height, margin[0], margin[1], char_width_by_font, line_height_by_font
-      )
+      if self.title and self.title.text:
+        title_filter_data = self.title.to_FilterData()
+        title_filter = title_filter_data.build_text_filter_by_relative_pos(
+          self.video_width, self.video_height, margin[0], margin[1], char_width_by_font, line_height_by_font
+        )
+      else:
+        title_filter = None
 
       # ======================== TIMER ========================
 
@@ -547,10 +548,10 @@ class Map:
           )
         )
         
-        y_offset = (start_end_date_filter_data.font_size * line_height_by_font + margin[1] / 2)
+        y_offset = (start_end_date_filter_data.font_size * line_height_by_font * 1.5)
         y += (
           -y_offset
-          if self.timer.position in [RelativePosition.BOT_LEFT.value, RelativePosition.BOT_RIGHT.value, RelativePosition.BOT_MIDDLE.value]
+          if self.timer.position in [RelativePosition.BOT_LEFT, RelativePosition.BOT_RIGHT, RelativePosition.BOT_MIDDLE]
           else
           +y_offset
         )
@@ -560,7 +561,7 @@ class Map:
 
       # Overlap ALL filters in one
       text_filter = TextFilterData.concatenate_filters(
-          title_filter, timer_filter, init_datetime_filter
+        title_filter, timer_filter, init_datetime_filter
       )
 
       #endregion
@@ -603,7 +604,7 @@ class Map:
         return self.video_path
 
       if path_not_found(legend_path):
-        print_error(f"No se puede cargar la imagen de leyenda {legend_path} para el mapa {self.name}.")
+        console.print_error(f"No se puede cargar la imagen de leyenda {legend_path} para el mapa {self.name}.")
         return self.video_path
 
       video_with_legend_path = os.path.join(os.path.dirname(self.video_path), f"{self.name}_with_legend.mp4")
@@ -621,7 +622,7 @@ class Map:
       image_size = read_image_size(legend_path)
 
       if image_size[0] != self.video_width or image_size[1] != self.video_height:
-        print_verbose_info(f"Ajustando tamaño de la imagen de leyenda {legend_path}: {image_size[0]}x{image_size[1]} => {os.path.basename(self.video_path)} {self.video_width}x{self.video_height}")
+        console.print_verbose_info(f"Ajustando tamaño de la imagen de leyenda {legend_path}: {image_size[0]}x{image_size[1]} => {os.path.basename(self.video_path)} {self.video_width}x{self.video_height}")
         with Image.open(legend_path) as img:
           img = img.resize((self.video_width, self.video_height), Image.Resampling.BILINEAR)  # Use BILINEAR for better quality
 
@@ -698,38 +699,42 @@ def main():
     "suffix": "Videos 🎬",
     "length": len(maps) * 5,
     "print_end": "\n",
+    "show_percentage": False
   }
 
   # Iterate each MAP
   for i, map in enumerate(maps):
     print()
-    print_emphasis(f"{'=' * 40} 🧭 {map.name} 🕒 {'=' * 40}")
+    console.print_emphasis(f"{'=' * 40} 🧭 {map.name} 🕒 {'=' * 40}")
     print()
-    printProgressBar(
+    console.printProgressBar(
       i,
       progress_bar["total"],
       prefix=progress_bar["prefix"],
       suffix=progress_bar["suffix"],
       length=progress_bar["length"],
       printEnd=progress_bar["print_end"],
+      show_percent=progress_bar["show_percentage"],
     )
     print()
     
     
     videos.append(map.frames_to_video(yes_to_all, debug_mode, verbose, margin, char_width_by_font, line_height_by_font))
-  
-  
+
+
   print()
-  printProgressBar(
+  console.printProgressBar(
     progress_bar["total"],
     progress_bar["total"],
     prefix="✨ COMPLETED ✨",
     suffix=progress_bar["suffix"],
     length=progress_bar["length"],
+    show_percent=progress_bar["show_percentage"],
   )
   print()
-  print_file_list(videos, '🎬 Videos')
+  console.print_file_list(videos, '🎬 Videos')
   print()
+
 
 #endregion
 
@@ -747,7 +752,7 @@ def to_datetime(date_str: str) -> datetime | None:
   try:
     return datetime.strptime(date_str, '%d-%m-%Y %H:%M:%S')
   except ValueError:
-    print_error(f"Fecha no válida: {date_str}. Debe tener el formato 'dd-mm-YYYY HH:MM:SS'.")
+    console.print_error(f"Fecha no válida: {date_str}. Debe tener el formato 'dd-mm-YYYY HH:MM:SS'.")
     return None
 
 #endregion

@@ -1,3 +1,4 @@
 /frames/**/*
 video/**/*
 /test/**/*
+__pycache/*
