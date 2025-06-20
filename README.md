@@ -1,14 +1,20 @@
-# Frames to Video Converter for QGIS
+# Map Video Generator for QGIS
 
 QGIS permite renderizar animaciones con su herramienta de línea de tiempo si los datos tienen atributos temporales.
 
 Lo que hace QGIS es generar frames por cada intervalo de tiempo y guardarlos como imágenes en una carpeta.
 
-Para convertir estos frames a un video he creado este script que usa el comando ffmpeg.
+Para convertir estos frames a un video he creado este script que usa el comando _ffmpeg_.
 
 ## USO
 
-Cuando hayas configurado todo, ejecuta convert_to_video.bat.
+Mete los frames generados del mapa en la carpeta **_frames_**.
+
+Las imágenes de leyendas en la carpeta **_legend_images_**.
+
+Configura todo en el **_config.yaml_**.
+
+Y ejecuta **_convert_to_video.bat_**.
 
 ## CONFIGURACIÓN
 
