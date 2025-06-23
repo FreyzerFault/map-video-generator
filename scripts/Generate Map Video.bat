@@ -31,15 +31,13 @@
 ::
 ::
 ::978f952a14a936cc963da21a135fa983
-::[Bat To Exe Converter]
-
 @echo on
 
 :: Script python map_video_generator.py
 :: Install Requirements.txt
 pip install -r requirements.txt
 
-set script_path=./src/main.py -ty
+set script_path=./src/main.py -y
 
 python %script_path%
 

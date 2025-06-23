@@ -31,7 +31,6 @@
 ::
 ::
 ::978f952a14a936cc963da21a135fa983
-::[Bat To Exe Converter]
 
 @echo on
 
