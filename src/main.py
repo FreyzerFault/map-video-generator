@@ -449,11 +449,14 @@ class Map:
     self.title = title if title else TextBox.EMPTY_TITLE
     self.overlay_legend_path = overlay_legend_path
     
+    if path_not_found(self.frames_path):
+      console.print_error(f"⚠ No se ha encontrado la carpeta del mapa {self.name} o está vacía.")
+    
     # Map Size
     first_frame = get_first_file(self.frames_path)
     
     if not first_frame:
-      console.print_error(f"No se ha encontrado ningún frame en la carpeta de frames {self.frames_path}")
+      console.print_error(f"⚠ No se ha encontrado ningún frame en la carpeta de frames {self.frames_path}")
       return
     
     self.size = read_image_size(first_frame)  # Placeholder for video size, to be set later

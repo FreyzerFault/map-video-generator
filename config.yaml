@@ -1,7 +1,7 @@
 ---
-input_frames_folder_path: ./frames
-output_videos_folder_path: ./video
-legend_images_folder_path: ./legend images
+input_frames_folder_path: ./- frames
+output_videos_folder_path: ./- video
+legend_images_folder_path: ./- legend images
 
 margin: # Margin in pixels for any text overlay
   x: 30
