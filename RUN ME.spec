@@ -22,7 +22,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='RUN_ME',
+    name='RUN ME',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

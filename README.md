@@ -89,7 +89,29 @@ Copia y pega cada bloque de mapa para generar otro mapa en el orden de la lista.
 
 ## Código
 
-Para ver o modificar el código clona el repositorio.
+Para probar o modificar el código clona el repositorio.
+
+Dentro de src está todo el funcionamiento del programa.
+
+### Compilación
+
+Para compilarlo ejecuta:
+
+```cmd
+py _build_bundle.py
+```
+
+#### ¿Qué hace?
+
+- Comprueba que estén las **dependencias** instaladas.
+- **Compila el RUN ME.exe** con _pyInstaller_. Servirá dentro del bundle para crear los accesos directos.
+- **Compila el bundle** con _pyInstaller_.  
+El .spec se ejecuta en pyInstaller como un script de python, por lo que he añadido al final que ejecute el script setup_bundle.py.  
+Puedes cambiar la versión y nombre del programa en el .spec.  
+El cual:
+  - **Inserta los assets** (archivos y carpetas necesarias para usar el programa, junto al .exe), y el RUN ME.exe, para ejecutarlo en el pc del usuario.  
+Debe ejecutarse cuando el usuario tenga el bundle, ya que crea accesos directos dependientes de la ruta absoluta de su equipo.
+  - **Comprime el bundle** en un .zip para publicar directamente.
 
 ## GIFS
 

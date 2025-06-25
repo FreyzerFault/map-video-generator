@@ -1,7 +1,0 @@
-name: Regla personal
-version: 0.0.1
-schema: v1
-rules:
-  - Always give concise responses
-  - Always use Spanish language, except in code and code comments
-  - Usa ante todo buenas prácticas, estándares y patrones de diseño en el código

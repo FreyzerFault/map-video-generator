@@ -7,7 +7,7 @@ from src.utils.print_utils import print_emphasis, print_file_list
 config_file_path = "./config.yaml"
 readme_file_path = "./README.md"
 
-setup_script_file = "RUN_ME.exe"
+setup_script_file = "RUN ME.exe"
 setup_script_path = os.path.join(f"./dist/{setup_script_file}")
 
 def insert_assets(build_folder_path: str):
@@ -47,7 +47,7 @@ def insert_assets(build_folder_path: str):
   
   # Mover el script para crear los shortcuts.
   # Lo he convertido a .exe para mejor usabilidad.
-  # Está en ./dist/RUN_ME.exe
+  # Está en ./dist/RUN ME.exe
   shutil.copy(setup_script_path, os.path.join(build_folder_path, setup_script_file))
   print()
   print_emphasis()

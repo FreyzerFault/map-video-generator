@@ -39,6 +39,16 @@ def check_and_install_requirements():
 
 
 
+def compile_RUN_ME_script():
+  setup_script = "shortcuts_setup.py"
+  print()
+  print_emphasis(f"======================= Compilando el script para crear los acceso directos ({setup_script}) =======================")
+  print()
+  
+  # pyinstaller .\shortcuts_setup.py -n "RUN ME" --onefile
+  subprocess.run(['pyinstaller', setup_script, '-n', 'RUN ME', '-y', '--onefile'])
+
+
 def install_bundle():
   print()
   print_emphasis(f"======================= Instalando el bundle con {spec_file} =======================")
@@ -48,5 +58,7 @@ def install_bundle():
   subprocess.run(['pyinstaller', spec_file, '-y'])
 
 check_and_install_requirements()
+
+compile_RUN_ME_script()
 
 install_bundle()
