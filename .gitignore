@@ -4,3 +4,6 @@ test
 - frames
 dist
 build
+
+.vscode
+.continue
