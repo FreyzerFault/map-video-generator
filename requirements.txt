@@ -1,7 +1,4 @@
-os
-subprocess
-yaml
-enum
-PIL
-colorama
 datetime
+colorama
+Pillow
+pyinstaller

@@ -1,8 +1,9 @@
 import subprocess
 import os
 from colorama import Fore, Back
-from image_utils import read_image_size
-from utils import console, get_first_file
+from utils.image_utils import read_image_size
+from utils.print_utils import print, print_info, print_verbose_info, print_emphasis
+from utils.file_utils import get_first_file
 
 
 def frames_to_video(input_frames_path: str, output_video_path: str, framerate: int, text_filter: str = "", verbose: bool = False):
@@ -35,10 +36,10 @@ def frames_to_video(input_frames_path: str, output_video_path: str, framerate: i
   ]
   
   if verbose:
-    console.print()
-    console.print_info("Ejecutando Comando: ")
-    console.print_verbose_info(' '.join(command))
-    console.print()
+    print()
+    print_info("Ejecutando Comando: ")
+    print_verbose_info(' '.join(command))
+    print()
   
   subprocess.run(command)
 
@@ -57,15 +58,15 @@ def overlay_image_on_video(video_path: str, image_path: str, output_video_path: 
       '-loglevel', 'info' if verbose else 'warning', # Reduce output verbosity
       output_video_path
   ]
-  console.print()
+  print()
   image_file_str = f"{Back.WHITE}{Fore.BLACK} {os.path.basename(image_path)} {Fore.WHITE}{Back.RESET}"
   video_file_str = f"{Back.WHITE}{Fore.BLACK} {os.path.basename(video_path)} {Fore.WHITE}{Back.RESET}"
   pos_str = f" en ({x},{y})" if x != 0 and y != 0 else ""
-  console.print_emphasis(f"🗺️  Colocando Leyenda 🧭\n\n\t{image_file_str} sobre {video_file_str}{pos_str}\n\n\tResultado: {output_video_path}")
-  console.print()
+  print_emphasis(f"🗺️  Colocando Leyenda 🧭\n\n\t{image_file_str} sobre {video_file_str}{pos_str}\n\n\tResultado: {output_video_path}")
+  print()
   if verbose:
-    console.print_info("Ejecutando Comando: ")
-    console.print_verbose_info(' '.join(command))
-    console.print()
+    print_info("Ejecutando Comando: ")
+    print_verbose_info(' '.join(command))
+    print()
   
   subprocess.run(command)

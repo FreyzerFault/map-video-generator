@@ -8,17 +8,32 @@ Para convertir estos frames a un video he creado este script que usa el comando 
 
 ## USO
 
-Mete los frames generados del mapa en la carpeta **_frames_**.
+Descarga la última release (sección Releases de la derecha).
 
-Las imágenes de leyendas en la carpeta **_legend_images_**.
+Ejecuta "**_RUN_ME_**" antes de nada.
 
-Configura todo en el **_config.yaml_**.
+Mete los frames generados del mapa en la carpeta "**_- frames_**".
 
-Y ejecuta **_convert_to_video.bat_**.
+Las imágenes de leyendas en la carpeta "**_- legend_images_**".
+
+Configura todo en el "**_config.yaml_**".
+Si no entiendes algo mira los detalles [más abajo](#configuración).
+
+Y ejecuta "**Generar Videos de Mapas.exe**".
+
+Los videos generados aparecerán en la carpeta "**_- videos_**"
+
+### ¿Algo ha ido mal?
+
+Ejecuta el test: "**TEST - Genera Videos de los mapas en test**".  
+Generará unos videos de prueba en la carpeta "**_test_**".
+
+Fíjate en el "**_test/config.yaml_**", que contiene la configuración de la prueba.  
+Si la prueba tampoco funciona bien mándame la salida del terminal para que pueda ayudarte.
 
 ## CONFIGURACIÓN
 
-Configura su funcionamiento con el archivo **_config.json_**.
+Configura su funcionamiento con el archivo **_config.yaml_**.
 
 ### RUTAS
 
@@ -44,7 +59,8 @@ Configura su funcionamiento con el archivo **_config.json_**.
 
 ### MAPAS
 
-_**maps**_ Contiene la lista de mapas para automatizar la ejecución del script con varios mapas, cada uno con su configuración propia:
+"_**maps**_" Contiene la lista de mapas para automatizar la ejecución del script con varios mapas, cada uno con su configuración propia.  
+Copia y pega cada bloque de mapa para generar otro mapa en el orden de la lista.
 
 - **name**: Nombre del mapa. Debe coincidir con la carpeta que contiene sus frames y el nombre del video generado.
 - **frame_name**: Nombre dinámico de cada frame (configurado en QGIS en su generación). Ejemplo: f%04d.png
@@ -70,6 +86,10 @@ _**maps**_ Contiene la lista de mapas para automatizar la ejecución del script 
 - [Python 3](https://www.python.org/downloads/)
 
 (Las dependencias adicionales se instalan automáticamente al ejecutar el script convert_to_video.bat por primera vez)
+
+## Código
+
+Para ver o modificar el código clona el repositorio.
 
 ## GIFS
 

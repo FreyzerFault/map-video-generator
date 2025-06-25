@@ -1,4 +1,3 @@
-import os
 from PIL import Image
 
 image_folder = "./image comps"

@@ -1,13 +1,13 @@
 from __future__ import annotations
 import argparse
 import os
-from enum import Enum
+import sys
+from enum import Enum 
 from PIL import Image
-from colorama import Fore, Back, Style
 from datetime import datetime
-from image_utils import read_image_size
-from utils import ConsoleApp, console, get_first_file
-from utils import load_config, path_not_found
+from utils.image_utils import read_image_size
+from utils.print_utils import colorize, print, print_emphasis, print_error, print_warning, print_info, print_file_list, print_progressBar, print_verbose_info
+from utils.file_utils import load_config, path_not_found, get_first_file
 
 from ffmpeg_operations import overlay_image_on_video, frames_to_video
 
@@ -134,7 +134,7 @@ class TextFilterData:
       elif self.rel_position == RelativePosition.CENTER:
           return ((video_width - width) / 2, (video_height - height) / 2)
       else:
-          console.print_error(
+          print_error(
               f"Posición relativa no válida: {self.rel_position}. Debe ser una de las siguientes: {', '.join([pos.value for pos in RelativePosition])}."
           )
           raise ValueError()
@@ -288,7 +288,7 @@ class Interval:
     self.unit = unit
     
     if unit == TimeUnit.INVALID:
-      console.print_error(f"Unidad de tiempo no válida: {unit.value}. Debe ser una de las siguientes: {[u.value for u in TimeUnit]}.")
+      print_error(f"Unidad de tiempo no válida: {unit.value}. Debe ser una de las siguientes: {[u.value for u in TimeUnit]}.")
       self.seconds = -1
       self.unit_label = "[INVALID]"
     
@@ -306,7 +306,7 @@ class Interval:
       unit: TimeUnit = TimeUnit(text[-1])
       return Interval(num, unit)
     except ValueError:
-      console.print_error(f"Unidad de tiempo no válida: {text[-1]}. Debe ser una de las siguientes: {[unit.value for unit in TimeUnit]}.")
+      print_error(f"Unidad de tiempo no válida: {text[-1]}. Debe ser una de las siguientes: {[unit.value for unit in TimeUnit]}.")
       return Interval(num, TimeUnit.INVALID)
 
 
@@ -450,13 +450,13 @@ class Map:
     self.overlay_legend_path = overlay_legend_path
     
     if path_not_found(self.frames_path):
-      console.print_error(f"⚠ No se ha encontrado la carpeta del mapa {self.name} o está vacía.")
+      print_error(f"⚠ No se ha encontrado la carpeta del mapa {self.name} o está vacía.")
     
     # Map Size
     first_frame = get_first_file(self.frames_path)
     
     if not first_frame:
-      console.print_error(f"⚠ No se ha encontrado ningún frame en la carpeta de frames {self.frames_path}")
+      print_error(f"⚠ No se ha encontrado ningún frame en la carpeta de frames {self.frames_path}")
       return
     
     self.size = read_image_size(first_frame)  # Placeholder for video size, to be set later
@@ -492,7 +492,7 @@ class Map:
       
       # Check if the map exists in the input frames folder
       if path_not_found(self.frames_path):
-        console.print_error(
+        print_error(
           f"Los frames del mapa {self.name} no se encuentran en la ruta {self.frames_path}."
         )
         return ""
@@ -500,7 +500,7 @@ class Map:
       # Ask to overwrite if the vídeo already exists
       if (os.path.exists(self.video_path)
         and not yes_to_all
-        and input(f"{Fore.YELLOW}El vídeo de salida {self.video_path} ya existe. ¿Deseas sobrescribirlo? (s/n): {Style.RESET_ALL}")
+        and input(colorize(f"El vídeo de salida {self.video_path} ya existe. ¿Deseas sobrescribirlo? (s/n):", 'yellow'))
         == "n"
       ):
         return ""
@@ -512,9 +512,9 @@ class Map:
       interval = self.timer.interval
       
       print()
-      console.print_info(f"\t- ⏱️  {Fore.RED}{interval.num} {interval.unit_label} / frame{Fore.RESET} x {Fore.RED}{self.framerate} fps{Fore.RESET} = {self.framerate * interval.num} {interval.unit_label} {'reales' if interval.num > 1 else 'real'} / seg. de vídeo")
-      console.print_info(f"\t- 📅 {self.timer.init_dt} - {self.timer.end_dt}")
-      console.print_info(f"\t- 📏 {self.video_width} x {self.video_height} px")
+      print_info(f"\t- ⏱️ {colorize(f"{interval.num} {interval.unit_label} / frame", 'red')} x {colorize(f"{self.framerate} fps", 'red')} = {self.framerate * interval.num} {interval.unit_label} {'reales' if interval.num > 1 else 'real'} / seg. de vídeo")
+      print_info(f"\t- 📅 {self.timer.init_dt} - {self.timer.end_dt}")
+      print_info(f"\t- 📏 {self.video_width} x {self.video_height} px")
       print()
 
       #region ============================ DYNAMIC TEXT FILTER EXPRESSIONS ============================
@@ -607,7 +607,7 @@ class Map:
         return self.video_path
 
       if path_not_found(legend_path):
-        console.print_error(f"No se puede cargar la imagen de leyenda {legend_path} para el mapa {self.name}.")
+        print_error(f"No se puede cargar la imagen de leyenda {legend_path} para el mapa {self.name}.")
         return self.video_path
 
       video_with_legend_path = os.path.join(os.path.dirname(self.video_path), f"{self.name}_with_legend.mp4")
@@ -616,7 +616,7 @@ class Map:
         os.path.exists(video_with_legend_path)
         and not yes_to_all
         and input(
-          f"{Fore.YELLOW}El vídeo con leyenda {video_with_legend_path} ya existe. ¿Deseas sobrescribirlo? (s/n): {Style.RESET_ALL}"
+          colorize(f"El vídeo con leyenda {video_with_legend_path} ya existe. ¿Deseas sobrescribirlo? (s/n): ", 'yellow')
         ) == 'n'
       ):
         return self.video_path
@@ -625,7 +625,7 @@ class Map:
       image_size = read_image_size(legend_path)
 
       if image_size[0] != self.video_width or image_size[1] != self.video_height:
-        console.print_verbose_info(f"Ajustando tamaño de la imagen de leyenda {legend_path}: {image_size[0]}x{image_size[1]} => {os.path.basename(self.video_path)} {self.video_width}x{self.video_height}")
+        print_verbose_info(f"Ajustando tamaño de la imagen de leyenda {legend_path}: {image_size[0]}x{image_size[1]} => {os.path.basename(self.video_path)} {self.video_width}x{self.video_height}")
         with Image.open(legend_path) as img:
           img = img.resize((self.video_width, self.video_height), Image.Resampling.BILINEAR)  # Use BILINEAR for better quality
 
@@ -652,10 +652,13 @@ class Map:
 
 #region ====================================== MAIN ======================================
 
-def main():
+def main(args=None):
+  
+  if args is None:
+    args = sys.argv[1:]
   
   #region PARSE ARGUMENTS
-  args = parse_args()
+  args = parse_args(args)
   test_mode = args.test
   debug_mode = args.debug
   yes_to_all = args.yes_to_all
@@ -708,9 +711,9 @@ def main():
   # Iterate each MAP
   for i, map in enumerate(maps):
     print()
-    console.print_emphasis(f"{'=' * 40} 🧭 {map.name} 🕒 {'=' * 40}")
+    print_emphasis(f"{'=' * 40} 🧭 {map.name} 🕒 {'=' * 40}")
     print()
-    console.printProgressBar(
+    print_progressBar(
       i,
       progress_bar["total"],
       prefix=progress_bar["prefix"],
@@ -726,7 +729,7 @@ def main():
 
 
   print()
-  console.printProgressBar(
+  print_progressBar(
     progress_bar["total"],
     progress_bar["total"],
     prefix="✨ COMPLETED ✨",
@@ -735,7 +738,7 @@ def main():
     show_percent=progress_bar["show_percentage"],
   )
   print()
-  console.print_file_list(videos, '🎬 Videos')
+  print_file_list(videos, '🎬 Videos')
   print()
 
 
@@ -755,7 +758,7 @@ def to_datetime(date_str: str) -> datetime | None:
   try:
     return datetime.strptime(date_str, '%d-%m-%Y %H:%M:%S')
   except ValueError:
-    console.print_error(f"Fecha no válida: {date_str}. Debe tener el formato 'dd-mm-YYYY HH:MM:SS'.")
+    print_error(f"Fecha no válida: {date_str}. Debe tener el formato 'dd-mm-YYYY HH:MM:SS'.")
     return None
 
 #endregion
@@ -763,7 +766,7 @@ def to_datetime(date_str: str) -> datetime | None:
 
 #region ============================================= UTILS =========================================
 
-def parse_args():
+def parse_args(args):
     parser = argparse.ArgumentParser(
     description="Convertidor de Mapas en Frames a Video con Timer y Leyenda incluido. Configura todo en el config.json"
     )
@@ -791,10 +794,16 @@ def parse_args():
       action="store_true",
       help="Muestra más detalles en la salida de los comandos ejecutados.",
     )
-    return parser.parse_args()
+    return parser.parse_args(args)
 
 #endregion
 
 
 if __name__ == "__main__":
-  main()
+  try:
+    main()
+  except Exception as e:
+    print()
+    print_error(f"ERROR: {e}")
+    print()
+    input("Pulsa cualquier tecla para cerrar...")
