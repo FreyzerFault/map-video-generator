@@ -81,12 +81,6 @@ Copia y pega cada bloque de mapa para generar otro mapa en el orden de la lista.
   - **end_datetime**: Fecha final del video. (dd-MM-YYYY hh:mm:ss)
   - **position**: Posición relativa del Título (top_left, top_right, bot_left, bot_right, middle_left, middle_right, center)
 
-## Requisitos
-
-- [Python 3](https://www.python.org/downloads/)
-
-(Las dependencias adicionales se instalan automáticamente al ejecutar el script convert_to_video.bat por primera vez)
-
 ## Código
 
 Para probar o modificar el código clona el repositorio.
