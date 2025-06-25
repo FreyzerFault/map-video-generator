@@ -4,8 +4,8 @@ import shutil
 # import subprocess
 import win32com.client
 
-main_shortcut_name = "Generar Videos de Mapas"
-test_shortcut_name = "TEST - Genera Videos de los mapas en test"
+main_shortcut_name = "Generar Videos"
+test_shortcut_name = "TEST - Generar Videos de prueba"
 
 def main():
   # Crear los accesos directos

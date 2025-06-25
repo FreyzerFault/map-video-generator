@@ -6,6 +6,7 @@ from src.utils.print_utils import print_emphasis, print_file_list
 
 config_file_path = "./config.yaml"
 readme_file_path = "./README.md"
+test_folder_path = "./test"
 
 setup_script_file = "RUN ME.exe"
 setup_script_path = os.path.join(f"./dist/{setup_script_file}")
@@ -29,8 +30,8 @@ def insert_assets(build_folder_path: str):
     
     # Carpetas con assets a incluir
     copy_dir_paths = [
-			config["legend_images_folder_path"],
-			"./test",
+			config["overlay_images_folder_path"],
+			test_folder_path,
 		]
   
   for empty_dir in empty_dirs:
@@ -45,13 +46,25 @@ def insert_assets(build_folder_path: str):
   shutil.copy(config_file_path, os.path.join(build_folder_path, config_file_path))
   shutil.copy(readme_file_path, os.path.join(build_folder_path, readme_file_path))
   
+  
+  # Quiero que no contenga el output de video de test para que las pruebas sean vírgenes del todo
+  test_config_path = os.path.join(test_folder_path, config_file_path)
+  with open(test_config_path, 'r') as file:
+    config = yaml.load(file, Loader=yaml.FullLoader)
+    
+    video_folder = config["output_videos_folder_path"]
+    
+    for file in os.listdir(video_folder):
+      os.remove(os.path.join(test_folder_path, video_folder, file))
+  
+  
   # Mover el script para crear los shortcuts.
   # Lo he convertido a .exe para mejor usabilidad.
   # Está en ./dist/RUN ME.exe
   shutil.copy(setup_script_path, os.path.join(build_folder_path, setup_script_file))
   print()
   print_emphasis()
-  print_file_list([*empty_dirs, *copy_dir_paths, setup_script_file], f"Assets iniciales cargados en el bundle {build_folder_path}:")
+  print_file_list([*empty_dirs, *copy_dir_paths, setup_script_file], f"Assets iniciales cargados en el bundle {build_folder_path}")
   print()
 
 

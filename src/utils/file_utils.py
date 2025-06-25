@@ -1,6 +1,6 @@
 import os
 import yaml
-from utils.print_utils import print, print_error
+from utils.print_utils import print_error
 
 def load_config(path) -> dict:
   if path_not_found(path):

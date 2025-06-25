@@ -1,31 +1,40 @@
-# Map Video Generator for QGIS
+# Frames to Video Generator
 
-QGIS permite renderizar animaciones con su herramienta de línea de tiempo si los datos tienen atributos temporales.
+Esta herramienta **convierte imágenes en masa como frames de un video**.  
+Y **automatiza** el proceso de generación de varios videos.
 
-Lo que hace QGIS es generar frames por cada intervalo de tiempo y guardarlos como imágenes en una carpeta.
+Permite añadir un **timer** para visualizar el tiempo real.  
+Además de **texto** y **suponer una imagen** a modo de HUD.
+Útil para crear **Timelapses**.
 
-Para convertir estos frames a un video he creado este script que usa el comando _ffmpeg_.
+Nació de la necesidad de generar **mapas animados** a partir de datos de trazabilidad de un rebaño.  
+Nos permite generarlos en distintos intervalos de tiempo y distintos ritmos, superponer la leyenda automáticamente y etiquetarlos correctamente.
+
+QGIS permite renderizar animaciones con su herramienta de línea de tiempo a partir de datos con atributos temporales.  
+QGIS se encarga de generar frames. En un intervalo de tiempo y a un ritmo dado. Los guarda como imágenes en una carpeta.
+
+Este programa está programada sobre python, usando la librería _ffmpeg_, tanto para generar video como superponer texto dinámico e imágenes.
 
 ## USO
 
-Descarga la última release (sección Releases de la derecha).
+Descarga [la última Release](https://github.com/FreyzerFault/frames-to-video-generator/releases).
 
-Ejecuta "**_RUN_ME_**" antes de nada.
+Ejecuta "**_RUN ME_**" antes de nada.
 
-Mete los frames generados del mapa en la carpeta "**_- frames_**".
+Mete todos los frames dentro de su carpeta (el nombre de la carpeta será el del video generado) en la carpeta "**_- frames_**".
 
-Las imágenes de leyendas en la carpeta "**_- legend_images_**".
+Las imágenes de leyendas en la carpeta "**_- overlay images_**".
 
 Configura todo en el "**_config.yaml_**".
 Si no entiendes algo mira los detalles [más abajo](#configuración).
 
-Y ejecuta "**Generar Videos de Mapas.exe**".
+Y ejecuta "**Generar Videos**".
 
 Los videos generados aparecerán en la carpeta "**_- videos_**"
 
 ### ¿Algo ha ido mal?
 
-Ejecuta el test: "**TEST - Genera Videos de los mapas en test**".  
+Ejecuta el test: "**TEST - Generar Videos de prueba**".  
 Generará unos videos de prueba en la carpeta "**_test_**".
 
 Fíjate en el "**_test/config.yaml_**", que contiene la configuración de la prueba.  
@@ -37,9 +46,9 @@ Configura su funcionamiento con el archivo **_config.yaml_**.
 
 ### RUTAS
 
-- **input_frames_folder_path**: Carpeta contenedora de las carpetas de frames de cada mapa.
+- **input_frames_folder_path**: Carpeta contenedora de las carpetas con los frames de cada video.
 - **output_videos_folder_path**: Carpeta contenedora de los videos que se generan
-- **legend_images_folder_path**: Carpeta contenedora de las imágenes con la leyenda que quieras superponer al video
+- **overlay_images_folder_path**: Carpeta contenedora de las imágenes con la leyenda que quieras superponer al video
 
 ### Configuración de disposición global del texto
 
@@ -57,16 +66,16 @@ Configura su funcionamiento con el archivo **_config.yaml_**.
   - _color_: color del texto
   - _shadow_: true para que lleve una sombra
 
-### MAPAS
+### VIDEOS
 
-"_**maps**_" Contiene la lista de mapas para automatizar la ejecución del script con varios mapas, cada uno con su configuración propia.  
-Copia y pega cada bloque de mapa para generar otro mapa en el orden de la lista.
+"_**videos**_" Contiene la lista de videos para automatizar la ejecución del script con varios videos, cada uno con su configuración propia.  
+Copia y pega cada bloque de video para generar otro video en el orden de la lista.
 
-- **name**: Nombre del mapa. Debe coincidir con la carpeta que contiene sus frames y el nombre del video generado.
+- **name**: Nombre del video. Debe coincidir con la carpeta que contiene sus frames y el nombre del video generado.
 - **frame_name**: Nombre dinámico de cada frame (configurado en QGIS en su generación). Ejemplo: f%04d.png
 - **framerate**: frames por segundo. Ejemplo: 2fps para un video de 5 minutos por frame => 10 minutos reales por segundo de video.
 
-- **overlay_legend**: nombre de la imagen de leyenda que quieras superponer.
+- **overlay_image**: nombre de la imagen que quieras superponer (dentro de "_- overlay images_").
 
 - **title**:
   - **text**: Texto del título. Dejar vacío para no añadir ningún título
@@ -92,7 +101,7 @@ Dentro de src está todo el funcionamiento del programa.
 Para compilarlo ejecuta:
 
 ```cmd
-py _build_bundle.py
+py build_bundle.py
 ```
 
 #### ¿Qué hace?
@@ -106,6 +115,33 @@ El cual:
   - **Inserta los assets** (archivos y carpetas necesarias para usar el programa, junto al .exe), y el RUN ME.exe, para ejecutarlo en el pc del usuario.  
 Debe ejecutarse cuando el usuario tenga el bundle, ya que crea accesos directos dependientes de la ruta absoluta de su equipo.
   - **Comprime el bundle** en un .zip para publicar directamente.
+
+### Ejecutar
+
+Ejecuta main.py
+
+```cmd
+py ./src/main.py
+```
+
+Como opciones está:
+
+- y: Yes to all. Para aceptar automáticamente cualquier pregunta.
+- t: Test Mode. Para ejecutarlo sobre los datos y config de la carpeta test
+- d: Debug Mode. Para mostrar información en el video como texto superpuesto.
+- v: Verbose. Muestra más información de lo que hace por dentro
+
+La ejecución rápida:
+
+```cmd
+py ./src/main.py -y
+```
+
+Lo que uso para testear:
+
+```cmd
+py ./src/main.py -yt
+```
 
 ## GIFS
 

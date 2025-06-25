@@ -1,5 +1,4 @@
 from enum import Enum
-from typing import overload
 from colorama import init, Fore, Back, Style
 
 init(convert=True)

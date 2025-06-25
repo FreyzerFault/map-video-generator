@@ -1,9 +1,14 @@
 __pycache/*
-test
-- video
-- frames
-dist
-build
+test/video/*
+- video/*
+- frames/*
+- overlay images/*
+dist/*
+build/*
+
+gifs
 
 .vscode
 .continue
+
+__pycache__

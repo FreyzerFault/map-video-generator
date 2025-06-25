@@ -1,7 +1,7 @@
 ---
 input_frames_folder_path: ./- frames
 output_videos_folder_path: ./- video
-legend_images_folder_path: ./- legend images
+overlay_images_folder_path: ./- overlay images
 
 margin: # Margin in pixels for any text overlay
   x: 30
@@ -22,14 +22,14 @@ title_text_style:
   color: white
   shadow: false
 
-# Generate a video for each map in this list
-maps:
-- name: Antonia 29-09-24 15.30 al 17-11-24 # Map name must be the folder name with ALL the frames, and will be the name of the video to be generated
+# Generate a video for each video in this list
+videos:
+- name: Antonia 29-09-24 15.30 al 17-11-24 # Video name must be the folder name with ALL the frames, and will be the name of the video to be generated
   frame_name: fa%04d.png # Frame name pattern (%04d works with 5 digits or more if pass from 9999). This is changed in QGIS when generating the frames.
   framerate: 6 # Frames per Second
 
   # Path to the legend image to overlay over the video
-  overlay_legend_path: Leyenda 1 cabra Centro.png
+  overlay_image: Leyenda 1 cabra Centro.png
 
   # Optional title text to be displayed on the video
   title:

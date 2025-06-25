@@ -4,7 +4,7 @@ import sys
 from src.utils.print_utils import print, print_emphasis, print_error, print_warning
 
 requirements_file = "requirements.txt"
-spec_file = "Map Video Generator.spec"
+spec_file = "Frames to Video Generator.spec"
 
 def check_and_install_requirements():
   print()
@@ -54,7 +54,7 @@ def install_bundle():
   print_emphasis(f"======================= Instalando el bundle con {spec_file} =======================")
   print()
 
-	# pyinstaller "./Map Video Generator.spec" -y
+	# pyinstaller "./Frames to Video Generator.spec" -y
   subprocess.run(['pyinstaller', spec_file, '-y'])
 
 check_and_install_requirements()
