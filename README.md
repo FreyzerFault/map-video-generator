@@ -1,5 +1,9 @@
 # Frames to Video Generator
 
+<p align="center">
+  <img src="docs/video_map_gen_icon.png" alt="Project Icon" width="200">
+</p>
+
 Esta herramienta **convierte imágenes en masa como frames de un video**.  
 Y **automatiza** el proceso de generación de varios videos.
 
